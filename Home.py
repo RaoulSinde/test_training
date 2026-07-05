@@ -27,8 +27,9 @@ Cette application a été conçue pour vous aider à vous préparer aux tests de
 1. Sélectionnez une catégorie dans le menu latéral à gauche.
 2. Choisissez le nombre de questions que vous souhaitez réaliser (jusqu'à 10 par catégorie).
 3. Lancez le test et répondez aux questions.
-4. Après chaque question, vous pouvez choisir de voir immédiatement la correction ou de passer à la suite.
-5. À la fin du test, vous obtiendrez votre score et pourrez revoir l'ensemble des questions avec leurs corrections détaillées.
+4. Après chaque question, validez pour voir immédiatement la réponse correcte, l'explication détaillée, et poser vos questions à l'Assistant IA.
+5. À la fin du test, vous obtiendrez votre score et un récapitulatif détaillé.
+6. **Banque d'erreurs persistante** : Toutes vos erreurs sont enregistrées automatiquement. Vous pouvez ensuite lancer un test spécifique sur votre banque d'erreurs pour la vider au fur et à mesure de vos réussites !
 
 Bon entraînement !
 """)

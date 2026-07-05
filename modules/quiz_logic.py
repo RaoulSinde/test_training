@@ -3,6 +3,151 @@ import json
 import random
 import os
 
+ERROR_BANK_FILE = os.path.join("data", "error_bank.json")
+
+def merge_banks(bank_a, bank_b):
+    merged = {}
+    all_categories = set(bank_a.keys()).union(set(bank_b.keys()))
+    for cat in all_categories:
+        items_a = bank_a.get(cat, [])
+        items_b = bank_b.get(cat, [])
+        
+        merged_items = {}
+        for item in items_a:
+            if isinstance(item, dict) and "id" in item:
+                merged_items[item["id"]] = item
+        for item in items_b:
+            if isinstance(item, dict) and "id" in item:
+                q_id = item["id"]
+                if q_id not in merged_items or (item.get("user_choice_idx", -1) != -1):
+                    merged_items[q_id] = item
+                    
+        merged[cat] = list(merged_items.values())
+    return merged
+
+# Initialize CookieController
+_cookie_controller = None
+
+def get_cookie_controller():
+    global _cookie_controller
+    if _cookie_controller is None:
+        try:
+            from streamlit_cookies_controller import CookieController
+            _cookie_controller = CookieController()
+        except Exception:
+            _cookie_controller = None
+    return _cookie_controller
+
+def load_error_bank():
+    # 1. Initialize empty session state error_bank if not present
+    if 'error_bank' not in st.session_state:
+        st.session_state.error_bank = {}
+        
+    if 'cookie_loaded' not in st.session_state:
+        st.session_state.cookie_loaded = False
+
+    # 2. Try to load from local file first (fast and reliable)
+    file_bank = {}
+    try:
+        if os.path.exists(ERROR_BANK_FILE):
+            with open(ERROR_BANK_FILE, "r", encoding="utf-8") as f:
+                file_bank = json.load(f)
+    except Exception:
+        pass
+
+    # 3. Try to load from cookie
+    cookie_bank = {}
+    controller = get_cookie_controller()
+    if controller and not st.session_state.cookie_loaded:
+        cookie_val = None
+        try:
+            cookie_val = controller.get('error_bank')
+        except Exception:
+            pass
+
+        if cookie_val:
+            # Handle string deserialization
+            if isinstance(cookie_val, str):
+                try:
+                    cookie_val = json.loads(cookie_val)
+                except Exception:
+                    pass
+
+            if isinstance(cookie_val, dict):
+                # Normalize cookie items
+                for cat, items in cookie_val.items():
+                    new_items = []
+                    for item in items:
+                        if isinstance(item, dict):
+                            new_items.append(item)
+                        else:
+                            new_items.append({"id": int(item), "user_choice_idx": -1})
+                    cookie_bank[cat] = new_items
+                st.session_state.cookie_loaded = True
+
+    # 4. Merge file_bank, cookie_bank, and current session_state.error_bank
+    merged_bank = merge_banks(st.session_state.error_bank, file_bank)
+    merged_bank = merge_banks(merged_bank, cookie_bank)
+    
+    st.session_state.error_bank = merged_bank
+    return st.session_state.error_bank
+
+def save_error_bank(bank):
+    st.session_state.error_bank = bank
+    # Ensure cookie_loaded is True since we now have the most up-to-date state
+    st.session_state.cookie_loaded = True
+    
+    # 1. Save to local file
+    try:
+        os.makedirs(os.path.dirname(ERROR_BANK_FILE), exist_ok=True)
+        with open(ERROR_BANK_FILE, "w", encoding="utf-8") as f:
+            json.dump(bank, f, ensure_ascii=False, indent=4)
+    except Exception:
+        pass
+
+    # 2. Save to cookie
+    controller = get_cookie_controller()
+    if controller:
+        try:
+            # Serialize to string and use lax SameSite policy for local/Cloud persistence
+            controller.set('error_bank', json.dumps(bank), max_age=31536000, same_site='lax')
+        except Exception:
+            pass
+
+def add_to_error_bank(category, q_id, user_choice_idx=-1):
+    bank = load_error_bank()
+    if category not in bank:
+        bank[category] = []
+        
+    # Check if this question ID is already in the bank
+    existing_item = None
+    for item in bank[category]:
+        if item["id"] == int(q_id):
+            existing_item = item
+            break
+            
+    if existing_item:
+        existing_item["user_choice_idx"] = user_choice_idx
+        # Remove old huge text to free cookie space
+        if "user_choice" in existing_item:
+            del existing_item["user_choice"]
+    else:
+        bank[category].append({"id": int(q_id), "user_choice_idx": user_choice_idx})
+        
+    save_error_bank(bank)
+
+def remove_from_error_bank(category, q_id):
+    bank = load_error_bank()
+    if category in bank:
+        bank[category] = [item for item in bank[category] if item["id"] != int(q_id)]
+        save_error_bank(bank)
+
+def clear_error_bank(category):
+    bank = load_error_bank()
+    if category in bank:
+        bank[category] = []
+    save_error_bank(bank)
+
 def call_gemini_api(q_data, user_choice, chat_history):
     try:
         import google.generativeai as genai
@@ -168,14 +313,25 @@ def reset_quiz():
     st.session_state.show_correction = False
     st.session_state.quiz_finished = False
     st.session_state.chat_histories = {}
+    st.session_state.error_bank_mode = False
 
-def init_quiz(category, num_questions):
+def init_quiz(category, num_questions, error_bank_mode=False):
     if 'quiz_active' not in st.session_state:
         reset_quiz()
         
     data = load_data(category)
-    # Randomly select questions
-    selected_questions = random.sample(data, min(num_questions, len(data)))
+    
+    if error_bank_mode:
+        bank = load_error_bank()
+        err_items = bank.get(category, [])
+        err_ids = [item["id"] for item in err_items]
+        # Filter questions that are in the error bank
+        error_questions = [q for q in data if int(q.get("id", -1)) in err_ids]
+        selected_questions = random.sample(error_questions, min(num_questions, len(error_questions)))
+        st.session_state.error_bank_mode = True
+    else:
+        selected_questions = random.sample(data, min(num_questions, len(data)))
+        st.session_state.error_bank_mode = False
     
     st.session_state.quiz_active = True
     st.session_state.current_category = category
@@ -195,16 +351,119 @@ def next_question():
 def render_quiz(category):
     inject_custom_css()
 
+    # Load error bank cookies as early as possible so they are populated
+    bank = load_error_bank()
+
     # Check if we need to reset because we changed category mid-quiz
     if 'current_category' in st.session_state and st.session_state.current_category != category and st.session_state.current_category is not None:
         reset_quiz()
 
     if 'quiz_active' not in st.session_state or not st.session_state.quiz_active:
         st.title(f"Entraînement - {category.capitalize()}")
-        num_q = st.number_input("Combien de questions souhaitez-vous réaliser ?", min_value=1, max_value=10, value=5)
-        if st.button("Lancer le test", type="primary"):
-            init_quiz(category, num_q)
-            st.rerun()
+        
+        err_ids = bank.get(category, [])
+        num_err = len(err_ids)
+        
+        if num_err > 0:
+            st.info(f"💡 Vous avez **{num_err}** question{'s' if num_err > 1 else ''} dans votre banque d'erreurs pour cette catégorie.")
+            
+            tab1, tab2 = st.tabs(["Test Classique", "Banque d'erreurs"])
+            
+            with tab1:
+                num_q = st.number_input("Combien de questions souhaitez-vous réaliser ?", min_value=1, max_value=10, value=5, key="classic_num_q")
+                if st.button("Lancer le test classique", type="primary", key="btn_classic"):
+                    init_quiz(category, num_q, error_bank_mode=False)
+                    st.rerun()
+                    
+            with tab2:
+                action = st.radio("Que souhaitez-vous faire ?", ["S'entraîner (Lancer un test)", "Voir mes erreurs"], horizontal=True, key=f"action_{category}")
+                
+                if action == "S'entraîner (Lancer un test)":
+                    num_q_err = st.number_input("Combien de questions de la banque d'erreurs souhaitez-vous réaliser ?", min_value=1, max_value=min(10, num_err), value=min(5, num_err), key="err_num_q")
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if st.button("Lancer le test de la banque d'erreurs", type="primary", key="btn_err_bank", use_container_width=True):
+                            init_quiz(category, num_q_err, error_bank_mode=True)
+                            st.rerun()
+                    with col2:
+                        if st.button("Réinitialiser la banque d'erreurs", key="btn_clear_err_bank", use_container_width=True):
+                            clear_error_bank(category)
+                            st.success("La banque d'erreurs a été réinitialisée !")
+                            st.rerun()
+                else:
+                    st.write("### Vos questions en échec")
+                    data = load_data(category)
+                    
+                    for i, item in enumerate(err_ids):
+                        q_id = item["id"]
+                        
+                        # Find the question object in data
+                        q = next((question for question in data if int(question.get("id", -1)) == q_id), None)
+                        if not q:
+                            continue
+                            
+                        # Retrieve user's past answer using lightweight index
+                        user_ans = ""
+                        if "user_choice_idx" in item and item["user_choice_idx"] != -1:
+                            try:
+                                user_ans = q["options"][item["user_choice_idx"]]
+                            except IndexError:
+                                user_ans = item.get("user_choice", "")
+                        else:
+                            user_ans = item.get("user_choice", "")
+                            
+                        correct_ans = q["answer"]
+                        
+                        with st.expander(f"Erreur {i + 1}"):
+                            st.markdown(f'<div style="font-weight: bold; font-size: 14px; margin-bottom: 10px;">{q["question"]}</div>', unsafe_allow_html=True)
+                            
+                            st.write("**Options de réponse :**")
+                            for opt in q["options"]:
+                                if opt == correct_ans:
+                                    st.markdown(f"• **{opt}**  \n&nbsp;&nbsp;&nbsp;&nbsp;✅ *(Bonne réponse)*")
+                                elif opt == user_ans and opt != correct_ans:
+                                    st.markdown(f"• **{opt}**  \n&nbsp;&nbsp;&nbsp;&nbsp;❌ *(Votre réponse)*")
+                                else:
+                                    st.markdown(f"• {opt}")
+                            
+                            st.write("**Correction :**")
+                            st.info(q["correction"])
+                            
+                            # --- AI Chatbot Section ---
+                            st.write("---")
+                            st.write("### 🤖 Assistant IA - Posez vos questions !")
+                            
+                            chat_q_id = f"err_recap_{category}_{q_id}"
+                            
+                            if "chat_histories" not in st.session_state:
+                                st.session_state.chat_histories = {}
+                            if chat_q_id not in st.session_state.chat_histories:
+                                st.session_state.chat_histories[chat_q_id] = []
+                                
+                            # Display chat messages from history
+                            for msg in st.session_state.chat_histories[chat_q_id]:
+                                with st.chat_message(msg["role"]):
+                                    st.write(msg["content"])
+                                    
+                            # Chat input
+                            if user_query := st.chat_input("Ex: Expliquez-moi pourquoi l'autre option est incorrecte...", key=f"err_recap_chat_input_{chat_q_id}"):
+                                st.session_state.chat_histories[chat_q_id].append({"role": "user", "content": user_query})
+                                with st.chat_message("user"):
+                                    st.write(user_query)
+                                    
+                                with st.chat_message("assistant"):
+                                    with st.spinner("L'assistant IA réfléchit..."):
+                                        response_text = call_gemini_api(q, user_ans, st.session_state.chat_histories[chat_q_id])
+                                        st.write(response_text)
+                                        
+                                st.session_state.chat_histories[chat_q_id].append({"role": "assistant", "content": response_text})
+                                st.rerun()
+        else:
+            num_q = st.number_input("Combien de questions souhaitez-vous réaliser ?", min_value=1, max_value=10, value=5, key="only_classic_num_q")
+            if st.button("Lancer le test", type="primary", key="btn_only_classic"):
+                init_quiz(category, num_q, error_bank_mode=False)
+                st.rerun()
         return
 
     if st.session_state.quiz_finished:
@@ -221,33 +480,43 @@ def render_quiz(category):
     
     with st.container():
         st.markdown(f'<div style="font-weight: bold; font-size: 14px;">{q_data["question"]}</div>', unsafe_allow_html=True)
-        st.write("Votre réponse :")
         
         # User choice
         if not st.session_state.show_correction:
+            st.write("Votre réponse :")
             user_choice = st.radio("Sélectionnez :", q_data["options"], key=f"q_{q_index}", label_visibility="collapsed")
         else:
-            # Format options with emojis based on correctness
             correct_answer = q_data["answer"]
             user_choice = st.session_state.user_answers.get(q_index, "")
             
-            formatted_options = []
+            st.write("**Options de réponse :**")
             for opt in q_data["options"]:
                 if opt == correct_answer:
-                    formatted_options.append(f"{opt} ✅ (Bonne réponse)")
+                    st.markdown(f"• **{opt}**  \n&nbsp;&nbsp;&nbsp;&nbsp;✅ *(Bonne réponse)*")
                 elif opt == user_choice and opt != correct_answer:
-                    formatted_options.append(f"{opt} ❌ (Votre réponse)")
+                    st.markdown(f"• **{opt}**  \n&nbsp;&nbsp;&nbsp;&nbsp;❌ *(Votre réponse)*")
                 else:
-                    formatted_options.append(opt)
-            
-            # Display formatted options as disabled radio (we just use standard radio but ignore input)
-            st.radio("Sélectionnez :", formatted_options, index=q_data["options"].index(user_choice) if user_choice in q_data["options"] else 0, key=f"q_ans_{q_index}", label_visibility="collapsed", disabled=True)
+                    st.markdown(f"• {opt}")
     
     if not st.session_state.show_correction:
         with st.container():
             if st.button("Valider et afficher la réponse", type="primary", use_container_width=True):
                 st.session_state.user_answers[q_index] = user_choice
                 st.session_state.show_correction = True
+                
+                # Update error bank
+                correct_answer = q_data["answer"]
+                is_correct = (user_choice == correct_answer)
+                q_id = q_data.get("id")
+                
+                if st.session_state.get("error_bank_mode", False):
+                    if is_correct:
+                        remove_from_error_bank(category, q_id)
+                else:
+                    if not is_correct:
+                        user_choice_idx = q_data["options"].index(user_choice) if user_choice in q_data["options"] else -1
+                        add_to_error_bank(category, q_id, user_choice_idx)
+                
                 st.rerun()
     else:
         # Show answer and correction
@@ -329,18 +598,14 @@ def render_results():
         with st.expander(expander_title):
             st.markdown(f'<div style="font-weight: bold; font-size: 14px; margin-bottom: 10px;">{q["question"]}</div>', unsafe_allow_html=True)
             
-            # Format options with emojis based on correctness
-            formatted_options = []
+            st.write("**Options de réponse :**")
             for opt in q["options"]:
                 if opt == correct_ans:
-                    formatted_options.append(f"{opt} ✅ (Bonne réponse)")
+                    st.markdown(f"• **{opt}**  \n&nbsp;&nbsp;&nbsp;&nbsp;✅ *(Bonne réponse)*")
                 elif opt == user_ans and opt != correct_ans:
-                    formatted_options.append(f"{opt} ❌ (Votre réponse)")
+                    st.markdown(f"• **{opt}**  \n&nbsp;&nbsp;&nbsp;&nbsp;❌ *(Votre réponse)*")
                 else:
-                    formatted_options.append(opt)
-            
-            # Display formatted options as disabled radio
-            st.radio("Options :", formatted_options, index=q["options"].index(user_ans) if user_ans in q["options"] else 0, key=f"recap_q_ans_{i}", label_visibility="collapsed", disabled=True)
+                    st.markdown(f"• {opt}")
             
             st.write("**Correction :**")
             st.info(q["correction"])
