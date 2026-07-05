@@ -319,20 +319,61 @@ def render_results():
     
     st.write("### Récapitulatif")
     for i, q in enumerate(questions):
-        with st.expander(f"Question {i + 1} : {q['question']}"):
-            user_ans = answers.get(i, "Non répondu")
-            correct_ans = q["answer"]
+        user_ans = answers.get(i, "")
+        correct_ans = q["answer"]
+        is_correct = (user_ans == correct_ans)
+        
+        status_label = "Bonne réponse ✅" if is_correct else "Mauvaise réponse ❌"
+        expander_title = f"Question {i + 1} : {status_label}"
+        
+        with st.expander(expander_title):
+            st.markdown(f'<div style="font-weight: bold; font-size: 14px; margin-bottom: 10px;">{q["question"]}</div>', unsafe_allow_html=True)
             
-            st.write(f"**Votre réponse :** {user_ans}")
-            st.write(f"**Bonne réponse :** {correct_ans}")
+            # Format options with emojis based on correctness
+            formatted_options = []
+            for opt in q["options"]:
+                if opt == correct_ans:
+                    formatted_options.append(f"{opt} ✅ (Bonne réponse)")
+                elif opt == user_ans and opt != correct_ans:
+                    formatted_options.append(f"{opt} ❌ (Votre réponse)")
+                else:
+                    formatted_options.append(opt)
             
-            if user_ans == correct_ans:
-                st.success("Correct")
-            else:
-                st.error("Incorrect")
-                
+            # Display formatted options as disabled radio
+            st.radio("Options :", formatted_options, index=q["options"].index(user_ans) if user_ans in q["options"] else 0, key=f"recap_q_ans_{i}", label_visibility="collapsed", disabled=True)
+            
             st.write("**Correction :**")
             st.info(q["correction"])
+            
+            # --- AI Chatbot Section ---
+            st.write("---")
+            st.write("### 🤖 Assistant IA - Posez vos questions !")
+            
+            q_id = str(q.get("id", i))
+            
+            if "chat_histories" not in st.session_state:
+                st.session_state.chat_histories = {}
+            if q_id not in st.session_state.chat_histories:
+                st.session_state.chat_histories[q_id] = []
+                
+            # Display chat messages from history
+            for msg in st.session_state.chat_histories[q_id]:
+                with st.chat_message(msg["role"]):
+                    st.write(msg["content"])
+                    
+            # Chat input
+            if user_query := st.chat_input("Ex: Expliquez-moi pourquoi l'autre option est incorrecte...", key=f"recap_chat_input_{q_id}"):
+                st.session_state.chat_histories[q_id].append({"role": "user", "content": user_query})
+                with st.chat_message("user"):
+                    st.write(user_query)
+                    
+                with st.chat_message("assistant"):
+                    with st.spinner("L'assistant IA réfléchit..."):
+                        response_text = call_gemini_api(q, user_ans, st.session_state.chat_histories[q_id])
+                        st.write(response_text)
+                        
+                st.session_state.chat_histories[q_id].append({"role": "assistant", "content": response_text})
+                st.rerun()
             
     if st.button("Recommencer un test"):
         reset_quiz()
