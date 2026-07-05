@@ -245,17 +245,10 @@ def render_quiz(category):
     
     if not st.session_state.show_correction:
         with st.container():
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("Valider et passer à la suivante", use_container_width=True):
-                    st.session_state.user_answers[q_index] = user_choice
-                    next_question()
-                    st.rerun()
-            with col2:
-                if st.button("Valider et afficher la réponse", type="primary", use_container_width=True):
-                    st.session_state.user_answers[q_index] = user_choice
-                    st.session_state.show_correction = True
-                    st.rerun()
+            if st.button("Valider et afficher la réponse", type="primary", use_container_width=True):
+                st.session_state.user_answers[q_index] = user_choice
+                st.session_state.show_correction = True
+                st.rerun()
     else:
         # Show answer and correction
         with st.container():
