@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "question": "Trouvez la figure qui complète la série : Cercle, Carré, Triangle, Cercle, Carré, ...",
+    "options": ["Cercle", "Carré", "Triangle", "Losange"],
+    "answer": "Triangle",
+    "correction": "La série répète un motif de trois figures : Cercle, Carré, Triangle. Après le deuxième Carré, la figure suivante est donc un Triangle."
+  },
+  {
+    "id": 2,
+    "question": "Quel est l'intrus parmi ces figures (A: carré, B: rectangle, C: trapèze, D: cercle) ?",
+    "options": ["A", "B", "C", "D"],
+    "answer": "D",
+    "correction": "Le cercle (D) est l'intrus car c'est la seule figure qui n'a pas de côtés droits ou de coins, contrairement aux autres qui sont des polygones."
+  },
+  {
+    "id": 3,
+    "question": "Si 'chat' est codé 'dibu', comment est codé 'chien' ? (Indice: décalage)",
+    "options": ["dijfo", "eijfo", "dijep", "ejjfp"],
+    "answer": "dijfo",
+    "correction": "Chaque lettre est décalée d'une position dans l'alphabet (c->d, h->i, a->b, t->u). Pour 'chien' : c->d, h->i, i->j, e->f, n->o, ce qui donne 'dijfo'."
+  },
+  {
+    "id": 4,
+    "question": "Complétez la suite numérique logique (vue de manière abstraite) : 1, 11, 21, 1211, ...",
+    "options": ["111221", "312211", "123211", "1112211"],
+    "answer": "111221",
+    "correction": "C'est la suite de Conway (Look and say). On lit le terme précédent : '1' -> 'un 1' (11). '11' -> 'deux 1' (21). '21' -> 'un 2, un 1' (1211). Pour le suivant on lit '1211' -> 'un 1, un 2, deux 1' (111221)."
+  },
+  {
+    "id": 5,
+    "question": "Une matrice 3x3 contient des flèches. Ligne 1 : haut, droite, bas. Ligne 2 : droite, bas, gauche. Ligne 3 : bas, gauche, ... Quelle est la prochaine direction ?",
+    "options": ["haut", "bas", "droite", "gauche"],
+    "answer": "haut",
+    "correction": "La séquence effectue une rotation de 90 degrés dans le sens horaire. La flèche gauche (270°) tourne de 90° et devient une flèche pointant vers le haut."
+  },
+  {
+    "id": 6,
+    "question": "Si chaque lettre de A à Z vaut sa position (A=1, B=2...), quelle est la valeur abstraite de CAB ?",
+    "options": ["5", "6", "7", "8"],
+    "answer": "6",
+    "correction": "C = 3, A = 1, B = 2. La somme est 3 + 1 + 2 = 6."
+  },
+  {
+    "id": 7,
+    "question": "Complétez la suite de formes : 1 point, 3 points, 6 points, 10 points, ...",
+    "options": ["12 points", "14 points", "15 points", "16 points"],
+    "answer": "15 points",
+    "correction": "Ce sont les nombres triangulaires. La différence entre les termes augmente de 1 à chaque fois (+2, +3, +4). Le prochain ajout est +5, donc 10 + 5 = 15 points."
+  },
+  {
+    "id": 8,
+    "question": "Quel mot ne suit pas la même logique de construction que les autres : RADAR, KAYAK, ROTOR, BATEAU ?",
+    "options": ["RADAR", "KAYAK", "ROTOR", "BATEAU"],
+    "answer": "BATEAU",
+    "correction": "RADAR, KAYAK et ROTOR sont des palindromes (ils se lisent dans les deux sens). BATEAU n'en est pas un."
+  },
+  {
+    "id": 9,
+    "question": "Une image A montre un grand carré avec un petit rond dedans. L'image B montre un grand rond avec un petit carré dedans. L'image C montre un grand triangle avec une petite croix. Que montre l'image D pour conserver la logique ?",
+    "options": ["Une grande croix avec un grand triangle", "Une grande croix avec un petit triangle", "Un petit triangle avec une grande croix", "Un petit cercle avec un grand triangle"],
+    "answer": "Une grande croix avec un petit triangle",
+    "correction": "La relation entre A et B est l'inversion des tailles et des formes. Appliquée à C (grand triangle, petite croix), cela donne une grande croix et un petit triangle."
+  },
+  {
+    "id": 10,
+    "question": "Laquelle de ces séquences suit une règle différente ? A: 2-4-6-8, B: 3-6-9-12, C: 1-4-9-16, D: 5-10-15-20",
+    "options": ["A", "B", "C", "D"],
+    "answer": "C",
+    "correction": "A, B et D sont des suites arithmétiques régulières (addition de +2, +3, +5). C est la suite des carrés parfaits (1², 2², 3², 4²) et n'a pas une différence constante."
+  }
+]

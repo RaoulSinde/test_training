@@ -1,0 +1,20 @@
+# This is an example configuration file
+# To learn more, see the full config.yaml reference: https://docs.continue.dev/reference
+
+name: Example Config
+version: 1.0.0
+schema: v1
+
+# Define which models can be used
+# https://docs.continue.dev/customization/models
+models:
+  - name: "Gemini Flash (Vertex AI)"
+    provider: "vertexai"
+    model: "gemini-2.5-flash"
+    project: "crypto-ascent-501320-q4"
+    region: "europe-west1"
+    roles:
+      - chat
+      - edit
+      - apply
+      - autocomplete

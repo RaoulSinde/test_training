@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "question": "Si le budget du département augmente de 20% pour atteindre 120 000 €, quel était le budget initial ?",
+    "options": ["96 000 €", "100 000 €", "144 000 €", "110 000 €"],
+    "answer": "100 000 €",
+    "correction": "Soit X le budget initial. X * 1,20 = 120 000. Donc X = 120 000 / 1,20 = 100 000 €."
+  },
+  {
+    "id": 2,
+    "question": "Un rapport indique que sur 500 employés, 15% travaillent à temps partiel. Combien d'employés travaillent à temps plein ?",
+    "options": ["75", "425", "450", "350"],
+    "answer": "425",
+    "correction": "Le pourcentage d'employés à temps plein est de 85% (100% - 15%). 85% de 500 = 0,85 * 500 = 425. Alternativement : 15% de 500 = 75 employés à temps partiel, donc 500 - 75 = 425 employés à temps plein."
+  },
+  {
+    "id": 3,
+    "question": "Le prix d'un produit passe de 50 € à 40 €. Quel est le pourcentage de réduction ?",
+    "options": ["10%", "20%", "25%", "15%"],
+    "answer": "20%",
+    "correction": "La baisse est de 10 €. Le pourcentage de baisse se calcule par (Baisse / Prix initial) * 100 = (10 / 50) * 100 = 20%."
+  },
+  {
+    "id": 4,
+    "question": "Si 3 traducteurs peuvent traduire 15 pages en 2 heures, combien de pages 5 traducteurs traduiront-ils en 4 heures (à vitesse constante) ?",
+    "options": ["25", "30", "50", "60"],
+    "answer": "50",
+    "correction": "Vitesse d'un traducteur : 15 pages / 3 traducteurs / 2 heures = 2,5 pages par heure. Pour 5 traducteurs pendant 4 heures : 5 * 4 * 2,5 = 50 pages."
+  },
+  {
+    "id": 5,
+    "question": "Dans une réunion, le ratio femmes/hommes est de 3:2. S'il y a 30 personnes au total, combien y a-t-il de femmes ?",
+    "options": ["12", "15", "18", "20"],
+    "answer": "18",
+    "correction": "Le nombre total de parts dans le ratio est 3 + 2 = 5. Chaque part vaut 30 / 5 = 6 personnes. Les femmes représentent 3 parts, soit 3 * 6 = 18."
+  },
+  {
+    "id": 6,
+    "question": "Un investissement de 2000 € rapporte 5% d'intérêts simples par an. Quel est le montant total après 3 ans ?",
+    "options": ["2300 €", "2100 €", "2315,25 €", "2150 €"],
+    "answer": "2300 €",
+    "correction": "Intérêts annuels = 2000 * 5% = 100 €. Sur 3 ans, les intérêts simples s'élèvent à 3 * 100 = 300 €. Montant total = 2000 + 300 = 2300 €."
+  },
+  {
+    "id": 7,
+    "question": "Si une distance de 180 km est parcourue en 2h15, quelle est la vitesse moyenne en km/h ?",
+    "options": ["70", "80", "90", "100"],
+    "answer": "80",
+    "correction": "2h15 = 2,25 heures. Vitesse = Distance / Temps = 180 / 2,25 = 80 km/h."
+  },
+  {
+    "id": 8,
+    "question": "Le coût total de 4 chaises et 1 table est de 300 €. Si la table coûte 140 €, quel est le prix d'une chaise ?",
+    "options": ["30 €", "40 €", "45 €", "50 €"],
+    "answer": "40 €",
+    "correction": "Le coût des 4 chaises est de 300 - 140 = 160 €. Une chaise coûte donc 160 / 4 = 40 €."
+  },
+  {
+    "id": 9,
+    "question": "La population d'une ville est de 50 000 habitants. Elle augmente de 10% la première année, puis diminue de 10% l'année suivante. Quelle est la population finale ?",
+    "options": ["50 000", "49 500", "50 500", "45 000"],
+    "answer": "49 500",
+    "correction": "Après la première année : 50 000 * 1,10 = 55 000. Après la deuxième année : 55 000 * 0,90 = 49 500. Une hausse suivie d'une baisse du même pourcentage ne ramène pas à la valeur initiale."
+  },
+  {
+    "id": 10,
+    "question": "Vous achetez un article à 84 € TTC. La TVA est de 20%. Quel est le prix HT ?",
+    "options": ["64 €", "70 €", "67,2 €", "74 €"],
+    "answer": "70 €",
+    "correction": "TTC = HT * (1 + taux de TVA), donc HT = TTC / 1,20. HT = 84 / 1,20 = 70 €."
+  }
+]

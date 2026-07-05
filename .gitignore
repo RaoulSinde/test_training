@@ -1,0 +1,5 @@
+# Ignorer tous les fichiers de configuration au format TOML
+*.toml
+
+# Optionnel : Si vous souhaitez ignorer un dossier de configuration spécifique de Streamlit
+# .streamlit/
