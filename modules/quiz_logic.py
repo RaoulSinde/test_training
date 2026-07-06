@@ -2,124 +2,60 @@ import streamlit as st
 import json
 import random
 import os
+from supabase import create_client, Client
 
-ERROR_BANK_FILE = os.path.join("data", "error_bank.json")
-
-def merge_banks(bank_a, bank_b):
-    merged = {}
-    all_categories = set(bank_a.keys()).union(set(bank_b.keys()))
-    for cat in all_categories:
-        items_a = bank_a.get(cat, [])
-        items_b = bank_b.get(cat, [])
-        
-        merged_items = {}
-        for item in items_a:
-            if isinstance(item, dict) and "id" in item:
-                merged_items[item["id"]] = item
-        for item in items_b:
-            if isinstance(item, dict) and "id" in item:
-                q_id = item["id"]
-                if q_id not in merged_items or (item.get("user_choice_idx", -1) != -1):
-                    merged_items[q_id] = item
-                    
-        merged[cat] = list(merged_items.values())
-    return merged
-
-# Initialize CookieController
-_cookie_controller = None
-
-def get_cookie_controller():
-    global _cookie_controller
-    if _cookie_controller is None:
-        try:
-            from streamlit_cookies_controller import CookieController
-            _cookie_controller = CookieController()
-        except Exception:
-            _cookie_controller = None
-    return _cookie_controller
+# Initialisation du client Supabase
+supabase_url = st.secrets.get("SUPABASE_URL")
+supabase_key = st.secrets.get("SUPABASE_KEY")
+supabase = None
+if supabase_url and supabase_key:
+    try:
+        supabase = create_client(supabase_url, supabase_key)
+    except Exception as e:
+        st.error(f"Erreur d'initialisation de Supabase : {e}")
 
 def load_error_bank():
-    # 1. Initialize empty session state error_bank if not present
+    # Initialisation du session_state s'il n'est pas présent
     if 'error_bank' not in st.session_state:
         st.session_state.error_bank = {}
         
-    if 'cookie_loaded' not in st.session_state:
-        st.session_state.cookie_loaded = False
-
-    # 2. Try to load from local file first (fast and reliable)
-    file_bank = {}
-    try:
-        if os.path.exists(ERROR_BANK_FILE):
-            with open(ERROR_BANK_FILE, "r", encoding="utf-8") as f:
-                file_bank = json.load(f)
-    except Exception:
-        pass
-
-    # 3. Try to load from cookie
-    cookie_bank = {}
-    controller = get_cookie_controller()
-    if controller and not st.session_state.cookie_loaded:
-        cookie_val = None
+    if supabase:
         try:
-            cookie_val = controller.get('error_bank')
-        except Exception:
-            pass
-
-        if cookie_val:
-            # Handle string deserialization
-            if isinstance(cookie_val, str):
-                try:
-                    cookie_val = json.loads(cookie_val)
-                except Exception:
-                    pass
-
-            if isinstance(cookie_val, dict):
-                # Normalize cookie items
-                for cat, items in cookie_val.items():
-                    new_items = []
-                    for item in items:
-                        if isinstance(item, dict):
-                            new_items.append(item)
-                        else:
-                            new_items.append({"id": int(item), "user_choice_idx": -1})
-                    cookie_bank[cat] = new_items
-                st.session_state.cookie_loaded = True
-
-    # 4. Merge file_bank, cookie_bank, and current session_state.error_bank
-    merged_bank = merge_banks(st.session_state.error_bank, file_bank)
-    merged_bank = merge_banks(merged_bank, cookie_bank)
-    
-    st.session_state.error_bank = merged_bank
+            # Récupère toutes les erreurs depuis la table errors de Supabase
+            response = supabase.table("errors").select("*").execute()
+            bank = {}
+            for row in response.data:
+                cat = row.get("category")
+                if cat not in bank:
+                    bank[cat] = []
+                bank[cat].append({
+                    "id": int(row.get("id")),
+                    "user_choice_idx": int(row.get("user_choice_idx", -1))
+                })
+            st.session_state.error_bank = bank
+        except Exception as e:
+            st.warning(f"Impossible de charger la banque d'erreurs depuis Supabase : {e}")
+            if not st.session_state.error_bank:
+                st.session_state.error_bank = {}
     return st.session_state.error_bank
 
-def save_error_bank(bank):
-    st.session_state.error_bank = bank
-    # Ensure cookie_loaded is True since we now have the most up-to-date state
-    st.session_state.cookie_loaded = True
-    
-    # 1. Save to local file
-    try:
-        os.makedirs(os.path.dirname(ERROR_BANK_FILE), exist_ok=True)
-        with open(ERROR_BANK_FILE, "w", encoding="utf-8") as f:
-            json.dump(bank, f, ensure_ascii=False, indent=4)
-    except Exception:
-        pass
-
-    # 2. Save to cookie
-    controller = get_cookie_controller()
-    if controller:
-        try:
-            # Serialize to string and use lax SameSite policy for local/Cloud persistence
-            controller.set('error_bank', json.dumps(bank), max_age=31536000, same_site='lax')
-        except Exception:
-            pass
-
 def add_to_error_bank(category, q_id, user_choice_idx=-1):
-    bank = load_error_bank()
+    if supabase:
+        try:
+            # Upsert de la question en erreur dans la table errors
+            supabase.table("errors").upsert({
+                "id": int(q_id),
+                "user_choice_idx": int(user_choice_idx),
+                "category": category
+            }).execute()
+        except Exception as e:
+            st.warning(f"Erreur d'enregistrement de l'erreur dans Supabase : {e}")
+            
+    # Mise à jour locale du cache session_state
+    bank = st.session_state.get("error_bank", {})
     if category not in bank:
         bank[category] = []
         
-    # Check if this question ID is already in the bank
     existing_item = None
     for item in bank[category]:
         if item["id"] == int(q_id):
@@ -128,25 +64,38 @@ def add_to_error_bank(category, q_id, user_choice_idx=-1):
             
     if existing_item:
         existing_item["user_choice_idx"] = user_choice_idx
-        # Remove old huge text to free cookie space
-        if "user_choice" in existing_item:
-            del existing_item["user_choice"]
     else:
         bank[category].append({"id": int(q_id), "user_choice_idx": user_choice_idx})
         
-    save_error_bank(bank)
+    st.session_state.error_bank = bank
 
 def remove_from_error_bank(category, q_id):
-    bank = load_error_bank()
+    if supabase:
+        try:
+            # Suppression dans Supabase
+            supabase.table("errors").delete().eq("id", int(q_id)).execute()
+        except Exception as e:
+            st.warning(f"Erreur de suppression de l'erreur dans Supabase : {e}")
+            
+    # Mise à jour locale du cache session_state
+    bank = st.session_state.get("error_bank", {})
     if category in bank:
         bank[category] = [item for item in bank[category] if item["id"] != int(q_id)]
-        save_error_bank(bank)
+        st.session_state.error_bank = bank
 
 def clear_error_bank(category):
-    bank = load_error_bank()
+    if supabase:
+        try:
+            # Suppression complète de la catégorie dans Supabase
+            supabase.table("errors").delete().eq("category", category).execute()
+        except Exception as e:
+            st.warning(f"Erreur de réinitialisation de la catégorie dans Supabase : {e}")
+            
+    # Mise à jour locale du cache session_state
+    bank = st.session_state.get("error_bank", {})
     if category in bank:
         bank[category] = []
-    save_error_bank(bank)
+        st.session_state.error_bank = bank
 
 def call_gemini_api(q_data, user_choice, chat_history):
     try:
@@ -196,7 +145,7 @@ def inject_custom_css():
         /* 1. Contrainte de largeur maximale et centrage */
         .block-container {
             max-width: 800px;
-            padding-top: 2rem;
+            padding-top: 5rem;
             padding-bottom: 2rem;
         }
         
@@ -365,9 +314,9 @@ def render_quiz(category):
         num_err = len(err_ids)
         
         if num_err > 0:
-            st.info(f"💡 Vous avez **{num_err}** question{'s' if num_err > 1 else ''} dans votre banque d'erreurs pour cette catégorie.")
+            st.info(f"💡 Vous avez **{num_err}** question{'s' if num_err > 1 else ''} dans vos erreurs pour cette catégorie.")
             
-            tab1, tab2 = st.tabs(["Test Classique", "Banque d'erreurs"])
+            tab1, tab2 = st.tabs(["Test Classique", "Mes erreurs"])
             
             with tab1:
                 num_q = st.number_input("Combien de questions souhaitez-vous réaliser ?", min_value=1, max_value=10, value=5, key="classic_num_q")
@@ -379,18 +328,11 @@ def render_quiz(category):
                 action = st.radio("Que souhaitez-vous faire ?", ["S'entraîner (Lancer un test)", "Voir mes erreurs"], horizontal=True, key=f"action_{category}")
                 
                 if action == "S'entraîner (Lancer un test)":
-                    num_q_err = st.number_input("Combien de questions de la banque d'erreurs souhaitez-vous réaliser ?", min_value=1, max_value=min(10, num_err), value=min(5, num_err), key="err_num_q")
+                    num_q_err = st.number_input("Combien de questions de vos erreurs souhaitez-vous réaliser ?", min_value=1, max_value=min(10, num_err), value=min(5, num_err), key="err_num_q")
                     
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        if st.button("Lancer le test de la banque d'erreurs", type="primary", key="btn_err_bank", use_container_width=True):
-                            init_quiz(category, num_q_err, error_bank_mode=True)
-                            st.rerun()
-                    with col2:
-                        if st.button("Réinitialiser la banque d'erreurs", key="btn_clear_err_bank", use_container_width=True):
-                            clear_error_bank(category)
-                            st.success("La banque d'erreurs a été réinitialisée !")
-                            st.rerun()
+                    if st.button("Lancer le test de vos erreurs", type="primary", key="btn_err_bank", use_container_width=True):
+                        init_quiz(category, num_q_err, error_bank_mode=True)
+                        st.rerun()
                 else:
                     st.write("### Vos questions en échec")
                     data = load_data(category)
@@ -475,8 +417,15 @@ def render_quiz(category):
     total_q = len(st.session_state.questions)
     q_data = st.session_state.questions[q_index]
     
-    st.write(f"Progression : {q_index + 1} / {total_q}")
-    st.progress((q_index + 1) / total_q)
+    col_prog, col_quit = st.columns([4, 1])
+    with col_prog:
+        st.write(f"Progression : {q_index + 1} / {total_q}")
+        st.progress((q_index + 1) / total_q)
+    with col_quit:
+        st.write("")  # petit espacement vertical pour s'aligner avec le texte
+        if st.button("Quitter", key="btn_quit_mid_quiz", use_container_width=True):
+            reset_quiz()
+            st.rerun()
     
     with st.container():
         st.markdown(f'<div style="font-weight: bold; font-size: 14px;">{q_data["question"]}</div>', unsafe_allow_html=True)

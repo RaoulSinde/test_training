@@ -29,7 +29,7 @@ Cette application a été conçue pour vous aider à vous préparer aux tests de
 3. Lancez le test et répondez aux questions.
 4. Après chaque question, validez pour voir immédiatement la réponse correcte, l'explication détaillée, et poser vos questions à l'Assistant IA.
 5. À la fin du test, vous obtiendrez votre score et un récapitulatif détaillé.
-6. **Banque d'erreurs persistante** : Toutes vos erreurs sont enregistrées automatiquement. Vous pouvez ensuite lancer un test spécifique sur votre banque d'erreurs pour la vider au fur et à mesure de vos réussites !
+6. **Suivi persistant de vos erreurs** : Toutes vos erreurs sont enregistrées automatiquement. Vous pouvez ensuite lancer un test spécifique sur "Mes erreurs" pour vider la liste au fur et à mesure de vos réussites !
 
 Bon entraînement !
 """)
