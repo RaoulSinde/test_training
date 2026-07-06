@@ -8,7 +8,10 @@ from supabase import create_client, Client
 supabase_url = st.secrets.get("SUPABASE_URL")
 supabase_key = st.secrets.get("SUPABASE_KEY")
 supabase = None
-if supabase_url and supabase_key:
+
+if not supabase_url or not supabase_key:
+    st.error("⚠️ Variables d'environnement Supabase manquantes (SUPABASE_URL et SUPABASE_KEY dans secrets Streamlit).")
+else:
     try:
         supabase = create_client(supabase_url, supabase_key)
     except Exception as e:
@@ -19,37 +22,33 @@ def load_error_bank():
     if 'error_bank' not in st.session_state:
         st.session_state.error_bank = {}
         
-    if supabase:
-        try:
-            # Récupère toutes les erreurs depuis la table errors de Supabase
-            response = supabase.table("errors").select("*").execute()
-            bank = {}
-            for row in response.data:
-                cat = row.get("category")
-                if cat not in bank:
-                    bank[cat] = []
-                bank[cat].append({
-                    "id": int(row.get("id")),
-                    "user_choice_idx": int(row.get("user_choice_idx", -1))
-                })
-            st.session_state.error_bank = bank
-        except Exception as e:
-            st.warning(f"Impossible de charger la banque d'erreurs depuis Supabase : {e}")
-            if not st.session_state.error_bank:
-                st.session_state.error_bank = {}
+    if not supabase:
+        raise ConnectionError("Supabase n'est pas initialisé (vérifiez vos variables d'environnement SUPABASE_URL et SUPABASE_KEY).")
+        
+    # Récupère toutes les erreurs depuis la table errors de Supabase
+    response = supabase.table("errors").select("*").execute()
+    bank = {}
+    for row in response.data:
+        cat = row.get("category")
+        if cat not in bank:
+            bank[cat] = []
+        bank[cat].append({
+            "id": int(row.get("id")),
+            "user_choice_idx": int(row.get("user_choice_idx", -1))
+        })
+    st.session_state.error_bank = bank
     return st.session_state.error_bank
 
 def add_to_error_bank(category, q_id, user_choice_idx=-1):
-    if supabase:
-        try:
-            # Upsert de la question en erreur dans la table errors
-            supabase.table("errors").upsert({
-                "id": int(q_id),
-                "user_choice_idx": int(user_choice_idx),
-                "category": category
-            }).execute()
-        except Exception as e:
-            st.warning(f"Erreur d'enregistrement de l'erreur dans Supabase : {e}")
+    if not supabase:
+        raise ConnectionError("Supabase n'est pas initialisé.")
+        
+    # Upsert de la question en erreur dans la table errors
+    supabase.table("errors").upsert({
+        "id": int(q_id),
+        "user_choice_idx": int(user_choice_idx),
+        "category": category
+    }).execute()
             
     # Mise à jour locale du cache session_state
     bank = st.session_state.get("error_bank", {})
@@ -70,12 +69,11 @@ def add_to_error_bank(category, q_id, user_choice_idx=-1):
     st.session_state.error_bank = bank
 
 def remove_from_error_bank(category, q_id):
-    if supabase:
-        try:
-            # Suppression dans Supabase
-            supabase.table("errors").delete().eq("id", int(q_id)).execute()
-        except Exception as e:
-            st.warning(f"Erreur de suppression de l'erreur dans Supabase : {e}")
+    if not supabase:
+        raise ConnectionError("Supabase n'est pas initialisé.")
+        
+    # Suppression dans Supabase
+    supabase.table("errors").delete().eq("id", int(q_id)).execute()
             
     # Mise à jour locale du cache session_state
     bank = st.session_state.get("error_bank", {})
@@ -84,12 +82,11 @@ def remove_from_error_bank(category, q_id):
         st.session_state.error_bank = bank
 
 def clear_error_bank(category):
-    if supabase:
-        try:
-            # Suppression complète de la catégorie dans Supabase
-            supabase.table("errors").delete().eq("category", category).execute()
-        except Exception as e:
-            st.warning(f"Erreur de réinitialisation de la catégorie dans Supabase : {e}")
+    if not supabase:
+        raise ConnectionError("Supabase n'est pas initialisé.")
+        
+    # Suppression complète de la catégorie dans Supabase
+    supabase.table("errors").delete().eq("category", category).execute()
             
     # Mise à jour locale du cache session_state
     bank = st.session_state.get("error_bank", {})
