@@ -1,72 +1,128 @@
 [
   {
     "id": 1,
-    "question": "Si le budget du département augmente de 20% pour atteindre 120 000 €, quel était le budget initial ?",
-    "options": ["96 000 €", "100 000 €", "144 000 €", "110 000 €"],
-    "answer": "100 000 €",
-    "correction": "Soit X le budget initial. X * 1,20 = 120 000. Donc X = 120 000 / 1,20 = 100 000 €."
+    "question": "Which country had the highest ratio of Motorway-kilometers-per-person in 2010?",
+    "options": [
+      "Bulgaria",
+      "Germany",
+      "Italy",
+      "Netherlands",
+      "Spain"
+    ],
+    "answer": "Spain",
+    "correction": "**Data Interpretation**\n**From the table & chart we need:\n**\nTotal population in 2010 for all 5 countries\n\nTotal length of Motorways in 2010 for all 5\n**countries\n**From the question text we need:\n****\nFormula of the ratio (Motorway-kilometers-per-\nperson)\n**Reasoning**\nWe must evaluate the Motorway-kilometers-per-\nperson ratios for all five countries and compare them\nto find the country with the highest ratio.\n\n**Calculation**\nIt is important to note that the population data has\nbeen provided in millions and the Motorways lengths\nare given in thousands of kilometers. But since we\nonly need to compare the ratios and not evaluate the\nexact values of the ratios, it is alright to use the data\nas is without conversion to units.\n\nMotorway-kilometers-per-person ratio = Total\nMotorways length / Total population\n**\n**Bulgaria: 0.44 / 7.42 ~ 0.059\n******\n**Germany: 12.82 / 81.80 ~ 0.157\n******\n**Italy: 6.67 / 59.19 ~ 0.113\n******\n**Netherlands: 2.65 / 16.57 ~ 0.160\n******\n**Spain: 14.26 / 46.49 ~ 0.307\n****\n**Spain** has the highest Motorway-kilometers-per-\nperson ratio amongst the five countries by a fair\nmargin.\n\n**Potential Pitfalls and Shortcuts**\nWe do not need to calculate the exact Motorway-\nkilometers-per-person ratios; we only need to find a\nrelative value for each country which is quick and easy\nto calculate. In this case, we can use the population\ndata (in millions) and the Motorway length data (in\nthousands km) directly. If we were to incorporate the\nzeroes for the millions and the zeroes for the\nthousands in our calculation, not only would it take\nmore time it would also make our calculations prone\nto mistakes.\n\nIt is important to read the data for 2010 only and not\nto accidentally read the adjacent data for other years.\nAdditionally, we must be careful not to divide the\nmotorway length in one country with the population\nof another.\n\nWe know that the Motorway length should be in the\nnumerator of the ratio and the population figure\nshould be in the denominator. At a glance, we can\napproximate the ratios of each country (without even\nmaking exact calculations). For example, in Bulgaria's\ncase the numerator is roughly 0.5 and the\ndenominator is roughly 8, therefore the ratio is in the\nrange of 1 : 16. Similarly, the ratio of **Spain** is roughly\n15: 45 which simplifies to 1 : 3. This (much quicker)\nmethod also reveals that the country with the highest\nratio is **Spain**."
   },
   {
     "id": 2,
-    "question": "Un rapport indique que sur 500 employés, 15% travaillent à temps partiel. Combien d'employés travaillent à temps plein ?",
-    "options": ["75", "425", "450", "350"],
-    "answer": "425",
-    "correction": "Le pourcentage d'employés à temps plein est de 85% (100% - 15%). 85% de 500 = 0,85 * 500 = 425. Alternativement : 15% de 500 = 75 employés à temps partiel, donc 500 - 75 = 425 employés à temps plein."
+    "question": "Assuming that males and females were born in equal proportions, which of these 3 countries showed the least improvement in life expectancy from 2018 to 2023?",
+    "options": [
+      "Czechia",
+      "Czechia & Romania",
+      "Romania",
+      "Switzerland",
+      "Romania & Switzerland"
+    ],
+    "answer": "Switzerland",
+    "correction": "**Data Interpretation**\nFrom the provided table, we will be using all the data\nvalues for life expectancy at birth in the 3 noted\ncountries for 2 different years. From the question text,\nwe will use the info that males and females can be\nassumed to have been born in equal proportions.\n\n**Reasoning**\nSince we are assuming that males and females were\nborn in equal proportions, the overall life expectancy\nfor a country in a given year is the simple average of\nthe male and female life expectancy. Once, we have\ncalculated the life expectancy of each given country\nfor 2018 and 2023, we can find the difference to\ndetermine which country showed the least\nimprovement.\n\n**Calculation**\nLife expectancy at birth (in years):\n**Czechia (2018): (76.2 + 82.0) / 2 = 79.1**\n**Czechia (2023): (76.9 + 82.9) / 2 = 79.9**\nCzechia (difference): 79.9 - 79.1 = +0.8\n**\nRomania (2018): (71.7 + 79.2) / 2 = 75.45**\n**Romania (2023): (72.6 + 80.4) / 2 = 76.5**\nRomania (difference): 76.5 - 75.45 = +1.05\n**\n**Switzerland** (2018): (81.9 +85.7) / 2 = 83.8**\n**Switzerland (2023): (82.4 +86.0) / 2 = 84.2**\n**Switzerland** (difference): 84.2 - 83.8 = +0.4\n\nAmong the 3 countries, **Switzerland** showed the least\nimprovement in life expectancy at birth between 2018\nand 2023.\n\n**Potential Shortcuts / Pitfalls**\nIt is critical not to average out the male life expectancy\nand the female life expectancy for different years. The\noverall life expectancy is the average of the male and\nfemale life expectancy for the same year.\n\nThe question asked for the least improvement in life\nexpectancy, not the biggest improvement. Be careful.\n\nSince the life expectancy in **Switzerland** is already very\nhigh, it is hard to improve too much on it."
   },
   {
     "id": 3,
-    "question": "Le prix d'un produit passe de 50 € à 40 €. Quel est le pourcentage de réduction ?",
-    "options": ["10%", "20%", "25%", "15%"],
-    "answer": "20%",
-    "correction": "La baisse est de 10 €. Le pourcentage de baisse se calcule par (Baisse / Prix initial) * 100 = (10 / 50) * 100 = 20%."
+    "question": "Based on the above table, how much land area does not fall into the utilised agricultural category in Denmark? (1 square km = 100 hectares)",
+    "options": [
+      "0.152 million hectares",
+      "2.718 million square km",
+      "15.2 thousand square km",
+      "2 717.8 thousand hectares"
+    ],
+    "answer": "15.2 thousand square km",
+    "correction": "The area in question is equal to 4 240 thousand\nhectares * (1 - 0.641) = 1 522.2 thousand hectares =\n1.522 million hectares = **15.2 thousand square km**."
   },
   {
     "id": 4,
-    "question": "Si 3 traducteurs peuvent traduire 15 pages en 2 heures, combien de pages 5 traducteurs traduiront-ils en 4 heures (à vitesse constante) ?",
-    "options": ["25", "30", "50", "60"],
-    "answer": "50",
-    "correction": "Vitesse d'un traducteur : 15 pages / 3 traducteurs / 2 heures = 2,5 pages par heure. Pour 5 traducteurs pendant 4 heures : 5 * 4 * 2,5 = 50 pages."
+    "question": "Based on the table, approximately how many children did an average nursery group have in 2003/2004?",
+    "options": [
+      "15",
+      "18",
+      "22",
+      "46",
+      "31"
+    ],
+    "answer": "22",
+    "correction": "**Data Interpretation**\nFrom the table provided, we will be using the data\nvalues referring to the number of children in nurseries\n2003-2004 (thousands) as well as the number of\nchildren's groups 2003-2004. All other data provided\nby the table are irrelevant to our question.\n\n**Reasoning**\nTo calculate approximately how many children were in\neach group in the 2003-2004 period we must find in\nthe table the number of children and the number of\nchildren groups in that period.\nThen we have to divide the number of children by the\nnumber of groups. This way we get the number of\nchildren in 1 group.\n\n**Calculation**\nFirst we calculate how many children were in 1 group:\n**324,000 / 14,794 = 21.9**\n\nSo, as an average we can conclude that **22 children**\nare in 1 children group."
   },
   {
     "id": 5,
-    "question": "Dans une réunion, le ratio femmes/hommes est de 3:2. S'il y a 30 personnes au total, combien y a-t-il de femmes ?",
-    "options": ["12", "15", "18", "20"],
-    "answer": "18",
-    "correction": "Le nombre total de parts dans le ratio est 3 + 2 = 5. Chaque part vaut 30 / 5 = 6 personnes. Les femmes représentent 3 parts, soit 3 * 6 = 18."
+    "question": "Based on the above table, how great was the average annual increase of the monthly salaries of civil servants working in health care between 2003 and 2006?",
+    "options": [
+      "6 032 HUF.",
+      "5 117 HUF.",
+      "4 524 HUF.",
+      "3 619 HUF."
+    ],
+    "answer": "6 032 HUF.",
+    "correction": "**Data Interpretation**\nFrom the table provided, we will need to use data\nregarding the civil servants in Healthcare only.\nFurthermore only the data for 2003 and 2006 need be\nused. All other data are irrelevant.\n\n**Reasoning**\nWe need to calculate the increase in average monthly\nsalary which is the difference between the two listed\nfor the given years. We then need to divide this by the\nnumber of years elapsed to calculate the average rise.\n\n**Calculation**\n**First we need to calculate the increase in average\n**monthly income for healthcare workers:\n\n**108329 - 90233 = 18096**\n****\nThis rise was accumulated over the period 2003-2006\n**which is three years and so the average annual rise is:\n\n**18096/3 = 6032**\n**\nAll values given are in HUF and so is the answer.\n\n**Potential Shortcuts / Pitfalls**\nThis is quite and easy question but you do need to be\ncareful in calculating the number of years which you\nneed to divide by to get the average increase.\nAlthough there are 4 values quoted for 4 different\nyears, there have only been 3 annual pay rises\nbetween each of the consecutive years."
   },
   {
     "id": 6,
-    "question": "Un investissement de 2000 € rapporte 5% d'intérêts simples par an. Quel est le montant total après 3 ans ?",
-    "options": ["2300 €", "2100 €", "2315,25 €", "2150 €"],
-    "answer": "2300 €",
-    "correction": "Intérêts annuels = 2000 * 5% = 100 €. Sur 3 ans, les intérêts simples s'élèvent à 3 * 100 = 300 €. Montant total = 2000 + 300 = 2300 €."
+    "question": "Given that a liter of almond milk cost 2 dollars throughout the examined period, approximately how many million liters of almond milk did the U.S. citizens purchase in 2013?",
+    "options": [
+      "277 million liters",
+      "285 million liters",
+      "297 million liters",
+      "311 million liters",
+      "319 million liters"
+    ],
+    "answer": "297 million liters",
+    "correction": "**Data Interpretation**\nFrom the chart(s) we need:\n- Percentage change in U.S. sales over the previous\nyear in 2015 (i.e. 7.8%)\n- Percentage change in U.S. sales over the previous\nyear in 2014 (i.e. 39.8%)\n- Almond milk dollar sales in U.S. in 2015 ($894 650\n036\n\nFrom the question text we need:\n- A liter of almond milk cost 2 dollars throughout the\nexamined period\n\n**Reasoning**\nWe must form an equation for the quantity of almond\nmilk sold in the U.S. in 2013, incorporate the\npercentage changes in 2014 and 2015 along with the\nliter price of almond milk and equate it to the almond\nmilk dollar sales in 2015.\n\n**Calculation**\nLet X be the quantity of almond milk sold in 2013.\n\nThis sales quantity, X, grew by 39.8% in 2014 and then\nthe 2014 quantity grew by 7.8% in 2015. Therefore\nthe quantity sold in 2015 was:\n(X* (100% + 39.8%)) * (100% + 7.8%)\n\nThe dollar value of almond milk sold in 2015, in terms\nof X, can be found by multiplying this quantity by the\nliter price (i.e. $2 per liter):\n((X* (100% + 39.8%)) * (100% + 7.8%)) * $2\n\nWe already know from the chart that the exact dollar\nvalue of almond milk sold in 2015 was $894,650,036.\nTherefore by equating the above-noted expression\nwith the dollar value, we get:\n((X*(100% + 39.8%)) * (100% + 7.8%)) * $2 = $894 650\n036\n((X*(139.8%)) * (107.8%)) * $2 = $894 650 036\n((X*(139.8 / 100)) * (107.8/ 100)) * $2 = $894 650\n036\n(X* 1.398 * 1.078) * $2 = $894 650 036\n(X* 1.507044) * $2 = $894 650 036\nX*$3.014088 = $894 650 036\nX =$894 650 036 / $3.014088\nX = 296 822 799 liters\nX = **297 million liters**\n\n**Potential Pitfalls and Shortcuts**\nWe have taken the quantity of almond milk sold in\n2013 to be X liters. Therefore, the increase that\nhappened in 2013 over the previous year 2012 (i.e.\n50%) will not factor into the equation.\n\nWe also need to be careful about how we factor in the\npercentage increases of 2014 and 2015 into the\nequation. As explained earlier, each percentage\nincrease is given with respect to the sales of the\nprevious year. Therefore, it would be incorrect to\nassume that the total percentage increase in X, over\nthe two years, was 39.8% + 7.8% = 47.6%."
   },
   {
     "id": 7,
-    "question": "Si une distance de 180 km est parcourue en 2h15, quelle est la vitesse moyenne en km/h ?",
-    "options": ["70", "80", "90", "100"],
-    "answer": "80",
-    "correction": "2h15 = 2,25 heures. Vitesse = Distance / Temps = 180 / 2,25 = 80 km/h."
+    "question": "Based on the diagram, in which of the following periods was the relative (percentage) increase in the average price of coastal properties in Croatia the smallest?",
+    "options": [
+      "Between 2001 and 2005",
+      "Between 2002 and 2006",
+      "Between 2003 and 2007",
+      "Between 2004 and 2008"
+    ],
+    "answer": "Between 2004 and 2008",
+    "correction": "**Data Interpretation**\nFrom the diagram provided, we will be using the data\nvalues referring to the average price of coastal\nproperty in Croatia for the years 2001-2008\n(percentage of 2007 price, 2007 = 100%). All other\ndata provided by the diagram are irrelevant to our\nquestion.\n\n**Reasoning**\nTo calculate which of the potential answer options is\nthe period with the smallest percentage increase in\naverage price of coastal property in Croatia we\nmust first calculate the percentage increase for each\nperiod. To do this we must subtract the original value\nfrom the new value and subtract 1 from this\nproportion. If we then multiply this by 100 our figures\nwill be in percentage format which can be easier to\nhandle. With these figures we can then choose\nwhich is the smallest and we have our answer.\n\n**Calculation**\nFirstly we need to calculate the percentage increase\nfor each period.\n\n2001-2005: 100x ((1.81X / 0.94X) - 1) = 92.6%\n\n2002-2006: 100x ((2.3X / 1.06X) - 1) = 118%\n\n2003-2007: 100x ((2.64X / 1.08X) - 1) = 144.4%\n\n2004-2008: 100 x ((2.36X / 1.27X) - 1) = 85.8%\n\nThis shows that this, between 2004 and 2008, is the\ncorrect answer.\n\n**Potential Shortcuts / Pitfalls**\nWe can minimise the number of calculations by\nlooking at the figures provided. For instance, we can\nsee that the 2006 figure is over twice as large as the\n2002 figure, as is the 2007 compared to the 2003\nfigure. Therefore these are going to yield higher\nresults than our other two groups, thus halving the\nnumber of calculations we need to do."
   },
   {
     "id": 8,
-    "question": "Le coût total de 4 chaises et 1 table est de 300 €. Si la table coûte 140 €, quel est le prix d'une chaise ?",
-    "options": ["30 €", "40 €", "45 €", "50 €"],
-    "answer": "40 €",
-    "correction": "Le coût des 4 chaises est de 300 - 140 = 160 €. Une chaise coûte donc 160 / 4 = 40 €."
+    "question": "In Romania the population grew by 1.8% between 2000 and 2005. What was the change in the number of unemployed people over that time?",
+    "options": [
+      "+17000",
+      "-23000",
+      "+29000",
+      "-8000",
+      "+12000"
+    ],
+    "answer": "+29000",
+    "correction": "**Data Interpretation**\nFrom the table provided, we will be using the data\nvalues referring to the population of Romania along\nwith the percentage of the population making up the\nworkforce and the percentage of the workforce that is\nunemployed in 2000 and 2005 only. All other data\nprovided by the table are irrelevant to our question.\nFrom the question text itself, we will be using the\ninformation regarding the increase in the population\nof Romania between 2000 and 2005.\n\n**Reasoning**\nTo calculate the number of unemployed people we\nneed to multiply the percentage of the workforce that\nis unemployed by the size of the workforce and to\ncalculate the size of the workforce we need to\nmultiply the percentage of the population that makes\nup the workforce by the size of the population. We can\nthen calculate the difference.\n\n**Calculation**\nFirstly we need to calculate the size of the workforce\nin 2005:\n\n21635 *0.408 = 8827\n\nThe number unemployed in 2005 is then:\n\n8827 *0.091 = 803.26\n\nBefore we can do the same for 2000 we need to\ncalculate the population in 2000 which was:\n\n21635 / 1.018 = 21252\n\nThe number unemployed in 2000 was:\n\n21252 * 0.396 * 0.092 = 774.25\n**\n**This is difference of:\n\n803.26 - 774.25 = 29\n****\nThe population is given in thousands and so the\nanswer is also in thousands.\n\n**Potential Shortcuts / Pitfalls**\nDon't forget to adjust the population for the 2000\ncalculation. Note that the question text tells us that\nthe 2000 population increased by 1.8% to become the\n2005 population of 21635 therefore to revert back to\nthe 2000 population we need to divide by (1+1.8%) or\n1.018. If the question had said that the 2000\npopulation was 1.8% less than the 2005 population\nthen we would have had to multiply by (1-1.8%) or\n0.982 which is subtly different. When the percentage\nis change is small the difference between the 2\nanswers is very small but make sure you understand\nwhich to use when the percentages are larger."
   },
   {
     "id": 9,
-    "question": "La population d'une ville est de 50 000 habitants. Elle augmente de 10% la première année, puis diminue de 10% l'année suivante. Quelle est la population finale ?",
-    "options": ["50 000", "49 500", "50 500", "45 000"],
-    "answer": "49 500",
-    "correction": "Après la première année : 50 000 * 1,10 = 55 000. Après la deuxième année : 55 000 * 0,90 = 49 500. Une hausse suivie d'une baisse du même pourcentage ne ramène pas à la valeur initiale."
+    "question": "Using the data table shown, if each country increased their local aid donations by 10% in 2006, their direct aid by 5% and decreased their indirect aid by 2%, what would be the change\nin total aid donated in 2006?",
+    "options": [
+      "Down <1%.",
+      "Up <1%.",
+      "Up 3.7%.",
+      "Up 5.5%.",
+      "Up 6.4%."
+    ],
+    "answer": "Up 3.7%.",
+    "correction": "**Data Interpretation**\nFrom the table provided, we will be using all of the\ndata values. We will also need the data given in the\nquestion regarding the increases in each aid type.\n\n**Reasoning**\nWe need to calculate the total amount of each aid\ntype and increase it by the stated amount. We can\nthen sum the total aid donated in each of the two\nyears. Finally we can calculate the percentage\nincrease by taking the difference and dividing by the\n2005 value and multiplying by 100 to make it a\npercentage.\n\n**Calculation**\nFirstly we need to calculate how much of each kind of\naid was donated in 2005:\n**\n**Local: 14904 + 6542 + 8093 + **2860 + 21639 = 54038**\n******\n**Indirect: 9612 + 12310 + 15381 +**8060+24965=\n70328**\n******\n**Direct: 302 + 40504 + **4992 + 705 = 46503**\n****\nThis gives a 2005 total of:\n\n54038 + **70328 +46503 = 170869**\n**\n**Now apply the increases to each type of aid:\n******\n**Local: 54038 * 1.1 = 59442\n******\n**Indirect: 70328 *0.98 = 68921\n******\n**Direct: 46503 * 1.05 = 48828\n****\nThis gives a 2006 total of:\n\n59442 + **68921 + 48828 = 177191**\n**\n**The percentage increase is then:\n****\n100*(177191 - 170869) / 170869 = 3.7%\n\n**Potential Shortcuts / Pitfalls**\nBe careful to read the question carefully and notice\nthat the indirect aid decreases unlike the other two\ntypes of aid. Also, be careful to apply the correct\nadjustment to each type of aid as the adjustments are\ngiven in a different order to their order in the table."
   },
   {
     "id": 10,
-    "question": "Vous achetez un article à 84 € TTC. La TVA est de 20%. Quel est le prix HT ?",
-    "options": ["64 €", "70 €", "67,2 €", "74 €"],
-    "answer": "70 €",
-    "correction": "TTC = HT * (1 + taux de TVA), donc HT = TTC / 1,20. HT = 84 / 1,20 = 70 €."
+    "question": "Based on the above table and the fact that the number of working days lost through strikes in Iceland was 1 571 in 2001 and 1 052 in 2004 (per 1 000 inhabitants), how many\nworking days were lost per 1 000 inhabitants between 1996 and 2005 on a yearly average, excluding 2001 and 2004?",
+    "options": [
+      "139",
+      "141",
+      "154",
+      "173"
+    ],
+    "answer": "173",
+    "correction": "**Data Interpretation**\nFrom the table provided, we will be using the data\nvalues referring to the number of working days lost\ndue to strike (per 1000 inhabitants, yearly average,\n1996-2005) in Iceland. The rest of the table's\ncontents are irrelevant to our question. From the\nquestion text we will be using the information that\nthere were 1571 working days (per 1000 inhabitants)\nlost in 2001 and 1052 working days (per 1000\ninhabitants) lost in 2004.\n\n**Reasoning**\nTo calculate how many working days (per 1000\ninhabitants) were lost between 1996 and 2005 on a\nyearly average excluding the years 2001 and 2004 we\nmust first calculate the total number of working days\nlost between 1996 and 2005. We then need to\nsubtract the number of days lost in 2001 and 2004.\nThen with this new total figure we can divide it by the\nnumber of years passed (excluding 2001 and 2004) to\nfind the new average.\n\n**Calculation**\n**Firstly we calculate the total number of working days\n**lost:\n****\n401 days/year x 10 years = 4010 days (per 1000\ninhabitants)\n\nNow we can subtract the days lost in 2001 and 2004\n**from this total:\n**\n4010- **1571 - 1052 = 1387** days (per 1000\ninhabitants)\n**\n**To calculate the new yearly average we must divide\nthis by the number of years passed:\n****\n**10- 2 = 8** years\n\n**1387/8 = 173.375**\n\nAs we can see with rounding this means this is the\ncorrect answer of **173 days** per year.\n\n**Potential Shortcuts / Pitfalls**\nThis question is relatively straight forward but can\nsound confusing as a lot of information is given in the\nquestion text. A good technique to use is firstly to\nseparate the actual question from the rest of the text\nand then analyse the extra information given. Also\nwhen calculating an answer like this, which involves\nexcluding data, remember not only to subtract the\nnumber of days lost but also to subtract the years\nfrom the amount of years passed."
   }
 ]

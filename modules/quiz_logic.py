@@ -250,6 +250,12 @@ def load_data(category):
         
     return cleaned_data
 
+def get_image_url(category, q_id):
+    if category == "numerical":
+        base_url = supabase_url or "https://eylbsukpsmvificvyvrb.supabase.co"
+        return f"{base_url}/storage/v1/object/public/numerical_images/numerical_{q_id}.png"
+    return None
+
 def reset_quiz():
     st.session_state.quiz_active = False
     st.session_state.current_category = None
@@ -357,6 +363,10 @@ def render_quiz(category):
                         with st.expander(f"Erreur {i + 1}"):
                             st.markdown(f'<div style="font-weight: bold; font-size: 14px; margin-bottom: 10px;">{q["question"]}</div>', unsafe_allow_html=True)
                             
+                            img_url = get_image_url(category, q.get("id"))
+                            if img_url:
+                                st.image(img_url, use_container_width=True)
+                                
                             st.write("**Options de réponse :**")
                             for opt in q["options"]:
                                 if opt == correct_ans:
@@ -427,6 +437,10 @@ def render_quiz(category):
     with st.container():
         st.markdown(f'<div style="font-weight: bold; font-size: 14px;">{q_data["question"]}</div>', unsafe_allow_html=True)
         
+        img_url = get_image_url(category, q_data.get("id"))
+        if img_url:
+            st.image(img_url, use_container_width=True)
+            
         # User choice
         if not st.session_state.show_correction:
             st.write("Votre réponse :")
@@ -544,6 +558,11 @@ def render_results():
         with st.expander(expander_title):
             st.markdown(f'<div style="font-weight: bold; font-size: 14px; margin-bottom: 10px;">{q["question"]}</div>', unsafe_allow_html=True)
             
+            category = st.session_state.get("current_category")
+            img_url = get_image_url(category, q.get("id"))
+            if img_url:
+                st.image(img_url, use_container_width=True)
+                
             st.write("**Options de réponse :**")
             for opt in q["options"]:
                 if opt == correct_ans:
