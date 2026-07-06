@@ -1,0 +1,197 @@
+1
+
+E
+
+Explanation
+Rule 1: There is one fewer bubble each time. Rule 2:
+The fish's eye alternates between looking up and
+looking down. Rule 3: The fish's eye is closed for one
+figure then open for two. The looking up and down
+pattern for rule 2 continues even when the eye is
+closed. Rule 4: The fish's fin moves from a central
+position to down to centre to up to centre, so the next
+in sequence must be down.
+
+
+2
+
+D
+
+Explanation
+Rule #1: The dotted objects scroll through the pictures
+from right to left following the repeating pattern of:
+star, triangle, square. The objects first appear on the
+low level, then medium, then high. Rule #2: The
+objects are flipped horizontally when they appear for
+the second time. Rule #3: The squiggly object moves
+in an anticlockwise direction around the square. It has
+two „stations” on the horizontal sides and three on
+the vertical sides.
+
+
+3
+
+A
+
+Explanation
+Rule 1: The square moves counterclockwise around
+the corners, making two moves every second step.
+
+Rule 2: The heart also moves counterclockwise but
+takes only one step per turn.
+
+Rule 3: The star alternates between the top right and
+the bottom left corners.
+
+Rule 4: The shapes can overlap each other, the bottom
+shape is the heart, the middle one is the star, and the
+top shape is the square.
+
+
+4
+
+D
+
+Explanation
+Rule 1: The number of circles changes from one to
+two and vice versa. The colour of the circles changes
+from black to white and vice versa. The places of the
+circles are randomly chosen. Rule 2: One more of the
+black triangles rotates every step. The places are
+randomly chosen. Rule 3: The number of squares is
+always one, the colour changes every step. The places
+are randomly chosen.
+
+
+5
+
+D
+
+Explanation
+Rule #1: the arrow with the single arrowhead is
+moving one circle away from the bull's eye in each
+turn. The direction of the arrow shaft does not matter.
+Rule #2: The arrow with the traditional feathered tail
+is moving away from the bull's eye every other turn.
+Again the direction of the arrow shaft does not
+matter. Rule #3: The arrow with perpendicular line(s)
+at its base is moving closer to the bull's eye every
+third turn. Rule #4: The number of perpendicular lines
+on this arrow is equal to the number of shaded circles
+that are toward the inside from the current position of
+that arrow (including the one that it is pointing to in
+case it points to a shaded circle).
+
+
+6
+
+D
+
+Explanation
+Rule 1: There are 3 shapes with random
+colors/patterns in each of the 4 triangular sections of
+a frame.
+
+Rule 2: The arrangement of shapes and their colors
+within the frame start repeating, but vertically flipped,
+from 3rd step onwards.
+
+
+
+7
+
+A
+
+Explanation
+Initial situation: Each picture contains a large triangle
+that is formed of 4 identical triangles (3 of them point
+upwards and the one in the middle faces downwards.)
+
+Each of the 4 triangles are divided into an upper part
+(smaller triangle) and lower part (trapezium). Each
+picture contains 4 white circles.
+
+Rule 1: Exactly 1 upper small triangle and 1 lower
+trapezium can change colour in each picture.
+
+Rule 2: The circles remain white. (They disappear
+when the colour of the trapezium behind them
+changes into white.)
+
+
+8
+
+E
+
+Explanation
+Rule 1: In each frame, two shapes on the left are
+white and the two on the right are grey.
+
+Rule 2: Between odd and even frames, the group of
+shapes rotates 180°. The colours of the shapes are
+swapped.
+
+Rule 3: Between even and odd frames, the two grey
+shapes are replaced by two new grey shapes.
+
+
+
+9
+
+D
+
+Explanation
+Rule: Cards overlap 6 pairs of icons. 2 cards are
+turned each step revealing the icons under them.
+When both positions of a certain pair are revealed, the
+two cards together with the icons disappear in the
+next step.
+
+
+10
+
+B
+
+Explanation
+Rule 1: The pointer in the middle alternately moves
+one and two steps in the clockwise direction.
+
+Rule 2: The shape that the pointer points to, swaps
+places with the shape just before it, in the next frame.
+
+Rule 3. The shape directly opposite to the pointer, is
+copied to the center of the circle, in the next frame.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

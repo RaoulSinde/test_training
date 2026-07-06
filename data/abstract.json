@@ -1,72 +1,52 @@
 [
   {
     "id": 1,
-    "question": "Trouvez la figure qui complète la série : Cercle, Carré, Triangle, Cercle, Carré, ...",
-    "options": ["Cercle", "Carré", "Triangle", "Losange"],
-    "answer": "Triangle",
-    "correction": "La série répète un motif de trois figures : Cercle, Carré, Triangle. Après le deuxième Carré, la figure suivante est donc un Triangle."
+    "answer": "E",
+    "correction": "Rule 1: There is one fewer bubble each time. Rule 2: The fish's eye alternates between looking up and looking down. Rule 3: The fish's eye is closed for one figure then open for two. The looking up and down pattern for rule 2 continues even when the eye is closed. Rule 4: The fish's fin moves from a central position to down to centre to up to centre, so the next in sequence must be down."
   },
   {
     "id": 2,
-    "question": "Quel est l'intrus parmi ces figures (A: carré, B: rectangle, C: trapèze, D: cercle) ?",
-    "options": ["A", "B", "C", "D"],
     "answer": "D",
-    "correction": "Le cercle (D) est l'intrus car c'est la seule figure qui n'a pas de côtés droits ou de coins, contrairement aux autres qui sont des polygones."
+    "correction": "Rule #1: The dotted objects scroll through the pictures from right to left following the repeating pattern of: star, triangle, square. The objects first appear on the low level, then medium, then high. Rule #2: The objects are flipped horizontally when they appear for the second time. Rule #3: The squiggly object moves in an anticlockwise direction around the square. It has two „stations” on the horizontal sides and three on the vertical sides."
   },
   {
     "id": 3,
-    "question": "Si 'chat' est codé 'dibu', comment est codé 'chien' ? (Indice: décalage)",
-    "options": ["dijfo", "eijfo", "dijep", "ejjfp"],
-    "answer": "dijfo",
-    "correction": "Chaque lettre est décalée d'une position dans l'alphabet (c->d, h->i, a->b, t->u). Pour 'chien' : c->d, h->i, i->j, e->f, n->o, ce qui donne 'dijfo'."
+    "answer": "A",
+    "correction": "Rule 1: The square moves counterclockwise around the corners, making two moves every second step. Rule 2: The heart also moves counterclockwise but takes only one step per turn. Rule 3: The star alternates between the top right and the bottom left corners. Rule 4: The shapes can overlap each other, the bottom shape is the heart, the middle one is the star, and the top shape is the square."
   },
   {
     "id": 4,
-    "question": "Complétez la suite numérique logique (vue de manière abstraite) : 1, 11, 21, 1211, ...",
-    "options": ["111221", "312211", "123211", "1112211"],
-    "answer": "111221",
-    "correction": "C'est la suite de Conway (Look and say). On lit le terme précédent : '1' -> 'un 1' (11). '11' -> 'deux 1' (21). '21' -> 'un 2, un 1' (1211). Pour le suivant on lit '1211' -> 'un 1, un 2, deux 1' (111221)."
+    "answer": "D",
+    "correction": "Rule 1: The number of circles changes from one to two and vice versa. The colour of the circles changes from black to white and vice versa. The places of the circles are randomly chosen. Rule 2: One more of the black triangles rotates every step. The places are randomly chosen. Rule 3: The number of squares is always one, the colour changes every step. The places are randomly chosen."
   },
   {
     "id": 5,
-    "question": "Une matrice 3x3 contient des flèches. Ligne 1 : haut, droite, bas. Ligne 2 : droite, bas, gauche. Ligne 3 : bas, gauche, ... Quelle est la prochaine direction ?",
-    "options": ["haut", "bas", "droite", "gauche"],
-    "answer": "haut",
-    "correction": "La séquence effectue une rotation de 90 degrés dans le sens horaire. La flèche gauche (270°) tourne de 90° et devient une flèche pointant vers le haut."
+    "answer": "D",
+    "correction": "Rule #1: the arrow with the single arrowhead is moving one circle away from the bull's eye in each turn. The direction of the arrow shaft does not matter. Rule #2: The arrow with the traditional feathered tail is moving away from the bull's eye every other turn. Again the direction of the arrow shaft does not matter. Rule #3: The arrow with perpendicular line(s) at its base is moving closer to the bull's eye every third turn. Rule #4: The number of perpendicular lines on this arrow is equal to the number of shaded circles that are toward the inside from the current position of that arrow (including the one that it is pointing to in case it points to a shaded circle)."
   },
   {
     "id": 6,
-    "question": "Si chaque lettre de A à Z vaut sa position (A=1, B=2...), quelle est la valeur abstraite de CAB ?",
-    "options": ["5", "6", "7", "8"],
-    "answer": "6",
-    "correction": "C = 3, A = 1, B = 2. La somme est 3 + 1 + 2 = 6."
+    "answer": "D",
+    "correction": "Rule 1: There are 3 shapes with random colors/patterns in each of the 4 triangular sections of a frame. Rule 2: The arrangement of shapes and their colors within the frame start repeating, but vertically flipped, from 3rd step onwards."
   },
   {
     "id": 7,
-    "question": "Complétez la suite de formes : 1 point, 3 points, 6 points, 10 points, ...",
-    "options": ["12 points", "14 points", "15 points", "16 points"],
-    "answer": "15 points",
-    "correction": "Ce sont les nombres triangulaires. La différence entre les termes augmente de 1 à chaque fois (+2, +3, +4). Le prochain ajout est +5, donc 10 + 5 = 15 points."
+    "answer": "A",
+    "correction": "Initial situation: Each picture contains a large triangle that is formed of 4 identical triangles (3 of them point upwards and the one in the middle faces downwards.) Each of the 4 triangles are divided into an upper part (smaller triangle) and lower part (trapezium). Each picture contains 4 white circles. Rule 1: Exactly 1 upper small triangle and 1 lower trapezium can change colour in each picture. Rule 2: The circles remain white. (They disappear when the colour of the trapezium behind them changes into white.)"
   },
   {
     "id": 8,
-    "question": "Quel mot ne suit pas la même logique de construction que les autres : RADAR, KAYAK, ROTOR, BATEAU ?",
-    "options": ["RADAR", "KAYAK", "ROTOR", "BATEAU"],
-    "answer": "BATEAU",
-    "correction": "RADAR, KAYAK et ROTOR sont des palindromes (ils se lisent dans les deux sens). BATEAU n'en est pas un."
+    "answer": "E",
+    "correction": "Rule 1: In each frame, two shapes on the left are white and the two on the right are grey. Rule 2: Between odd and even frames, the group of shapes rotates 180°. The colours of the shapes are swapped. Rule 3: Between even and odd frames, the two grey shapes are replaced by two new grey shapes."
   },
   {
     "id": 9,
-    "question": "Une image A montre un grand carré avec un petit rond dedans. L'image B montre un grand rond avec un petit carré dedans. L'image C montre un grand triangle avec une petite croix. Que montre l'image D pour conserver la logique ?",
-    "options": ["Une grande croix avec un grand triangle", "Une grande croix avec un petit triangle", "Un petit triangle avec une grande croix", "Un petit cercle avec un grand triangle"],
-    "answer": "Une grande croix avec un petit triangle",
-    "correction": "La relation entre A et B est l'inversion des tailles et des formes. Appliquée à C (grand triangle, petite croix), cela donne une grande croix et un petit triangle."
+    "answer": "D",
+    "correction": "Rule: Cards overlap 6 pairs of icons. 2 cards are turned each step revealing the icons under them. When both positions of a certain pair are revealed, the two cards together with the icons disappear in the next step."
   },
   {
     "id": 10,
-    "question": "Laquelle de ces séquences suit une règle différente ? A: 2-4-6-8, B: 3-6-9-12, C: 1-4-9-16, D: 5-10-15-20",
-    "options": ["A", "B", "C", "D"],
-    "answer": "C",
-    "correction": "A, B et D sont des suites arithmétiques régulières (addition de +2, +3, +5). C est la suite des carrés parfaits (1², 2², 3², 4²) et n'a pas une différence constante."
+    "answer": "B",
+    "correction": "Rule 1: The pointer in the middle alternately moves one and two steps in the clockwise direction. Rule 2: The shape that the pointer points to, swaps places with the shape just before it, in the next frame. Rule 3. The shape directly opposite to the pointer, is copied to the center of the circle, in the next frame."
   }
 ]

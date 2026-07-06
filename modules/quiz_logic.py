@@ -97,6 +97,9 @@ def clear_error_bank(category):
 def call_gemini_api(q_data, user_choice, chat_history):
     try:
         import google.generativeai as genai
+        import requests
+        from PIL import Image
+        from io import BytesIO
         
         # Configure Gemini API key
         if "GEMINI_API_KEY" in st.secrets:
@@ -104,34 +107,65 @@ def call_gemini_api(q_data, user_choice, chat_history):
         else:
             return "Erreur : La clé GEMINI_API_KEY n'est pas définie dans vos secrets Streamlit."
             
+        # Déterminer la catégorie et récupérer l'image si elle existe
+        category = q_data.get("category") or st.session_state.get("current_category")
+        q_id = q_data.get("id")
+        
+        image = None
+        has_image_text = ""
+        if category and q_id:
+            img_url = get_image_url(category, q_id)
+            if img_url:
+                try:
+                    response = requests.get(img_url, timeout=10)
+                    if response.status_code == 200:
+                        image = Image.open(BytesIO(response.content))
+                        has_image_text = "\n- Image de la question : Une illustration (image PNG) est associée à cette question et t'est transmise afin que tu puisses l'analyser visuellement."
+                except Exception as img_err:
+                    # On continue même si le téléchargement de l'image échoue
+                    pass
+
         # Create a helpful system instruction using the question context
-        system_instruction = f"""Tu es un tuteur pédagogique expert préparant un candidat aux examens d'aptitude et de logique (notamment le raisonnement verbal).
+        system_instruction = f"""Tu es un tuteur pédagogique expert préparant un candidat aux examens d'aptitude et de logique (notamment le raisonnement verbal, numérique et abstrait).
 Voici le contexte complet de la question en cours :
 - Énoncé / Question : {q_data['question']}
 - Options proposées : {', '.join(q_data['options'])}
 - Réponse donnée par l'utilisateur : {user_choice}
 - Bonne réponse attendue : {q_data['answer']}
-- Correction / Explications officielles : {q_data['correction']}
+- Correction / Explications officielles : {q_data['correction']}{has_image_text}
 
 Consignes de comportement :
 1. Sois très bienveillant, clair, concis et extrêmement pédagogue dans tes réponses.
-2. Ne donne jamais de réponses fausses ou d'informations contradictoires avec la correction officielle.
+2. Ne donne jamais de réponses fausses ou d'informations contradictoires avec la correction officielle ou l'image fournie.
 3. Guide l'utilisateur pas à pas pour qu'il comprenne sa méprise ou pour éclaircir ses doutes.
-4. Réponds toujours en français.
-5. N'introduis pas tes réponses. 
-6. Fournis des réponses courtes, va droit au but.
+4. Utilise l'image transmise pour analyser visuellement le problème si la question est visuelle ou numérique (par exemple pour décrypter une figure, un tableau, une suite logique ou une forme géométrique).
+5. Réponds toujours en français.
+6. N'introduis pas tes réponses. 
+7. Fournis des réponses courtes, va droit au but.
 """
 
         model = genai.GenerativeModel("gemini-3.5-flash", system_instruction=system_instruction)
         
         # Build chat history for Gemini API (user / model)
         formatted_history = []
-        for msg in chat_history[:-1]:
+        for i, msg in enumerate(chat_history[:-1]):
             role = "user" if msg["role"] == "user" else "model"
-            formatted_history.append({"role": role, "parts": [msg["content"]]})
+            parts = [msg["content"]]
+            # Si c'est le premier message de l'utilisateur, on lui associe l'image si elle existe
+            if i == 0 and role == "user" and image is not None:
+                parts.insert(0, image)
+            formatted_history.append({"role": role, "parts": parts})
             
         chat_session = model.start_chat(history=formatted_history)
-        response = chat_session.send_message(chat_history[-1]["content"])
+        
+        # Pour le message en cours
+        current_content = chat_history[-1]["content"]
+        if len(chat_history) == 1 and image is not None:
+            # Si c'est le tout premier message, on envoie l'image avec le texte
+            response = chat_session.send_message([image, current_content])
+        else:
+            response = chat_session.send_message(current_content)
+            
         return response.text
     except Exception as e:
         return f"Désolé, une erreur est survenue lors de l'appel à l'assistant IA : {str(e)}"
@@ -216,7 +250,20 @@ def load_data(category):
     cleaned_data = []
     for q in data:
         cleaned_q = q.copy()
-        options = q.get("options", [])
+        
+        # Gestion spécifique de la catégorie abstract
+        if category == "abstract":
+            if "options" not in cleaned_q or not cleaned_q["options"]:
+                cleaned_q["options"] = ["Figure A", "Figure B", "Figure C", "Figure D", "Figure E"]
+            if "question" not in cleaned_q or not cleaned_q["question"]:
+                cleaned_q["question"] = "Quelle figure complète la série ?"
+            
+            # Normalisation de la réponse si c'est une lettre seule (ex: "A" -> "Figure A")
+            ans = cleaned_q.get("answer", "").strip().upper()
+            if ans in ["A", "B", "C", "D", "E"]:
+                cleaned_q["answer"] = f"Figure {ans}"
+
+        options = cleaned_q.get("options", [])
         cleaned_options = []
         explanations = []
         for opt in options:
@@ -227,11 +274,11 @@ def load_data(category):
         
         cleaned_q["options"] = cleaned_options
         
-        ans_text, ans_expl = clean_text_and_get_explanation(q.get("answer", ""))
+        ans_text, ans_expl = clean_text_and_get_explanation(cleaned_q.get("answer", ""), )
         cleaned_q["answer"] = ans_text
         
         # Build correction
-        orig_correction = q.get("correction", "").strip()
+        orig_correction = cleaned_q.get("correction", "").strip()
         if explanations:
             new_correction_parts = []
             if orig_correction:
@@ -251,9 +298,11 @@ def load_data(category):
     return cleaned_data
 
 def get_image_url(category, q_id):
+    base_url = supabase_url or "https://eylbsukpsmvificvyvrb.supabase.co"
     if category == "numerical":
-        base_url = supabase_url or "https://eylbsukpsmvificvyvrb.supabase.co"
         return f"{base_url}/storage/v1/object/public/numerical_images/numerical_{q_id}.png"
+    elif category == "abstract":
+        return f"{base_url}/storage/v1/object/public/abstract_images/abstract_{q_id}.png"
     return None
 
 def reset_quiz():

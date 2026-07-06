@@ -2,3 +2,5 @@ streamlit
 google-generativeai
 streamlit-cookies-controller
 supabase
+requests
+Pillow
